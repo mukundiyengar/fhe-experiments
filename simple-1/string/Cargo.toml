@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-concrete-core = "0.1.10"  # Replace with the actual version of the concrete-core crate you are using
-concrete-commons = "0.1.10"  # Replace with the actual version of the concrete-commons crate you are using
+concrete-core = "0.1.8"  # Replace with the actual version of the concrete-core crate you are using
+concrete-commons = "0.1.2"  # Replace with the actual version of the concrete-commons crate you are using

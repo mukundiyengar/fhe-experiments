@@ -1,10 +1,9 @@
-use concrete_core::crypto::encoding::Plaintext; // Import Plaintext type
+use concrete_core::crypto::encoding::{Plaintext, Cleartext}; // Import Plaintext and Cleartext types
 use concrete_core::crypto::lwe::LweCiphertext; // Import LweCiphertext type
 use concrete_core::crypto::secret::LweSecretKey; // Import LweSecretKey type
-use concrete_core::crypto::secret::generators::SecretRandomGenerator; // Import SecretRandomGenerator
-use concrete_core::crypto::parameters::LweDimension; // Import LweDimension type
-use concrete_core::math::random::RandomGenerator; // Import RandomGenerator for key generation
-use concrete_commons::dispersion::LogStandardDev; // Import LogStandardDev for noise
+use concrete_core::crypto::LweDimension; // Import LweDimension type
+use concrete_core::math::dispersion::LogStandardDev; // Import LogStandardDev for noise
+use concrete_core::crypto::secret::generators::{SecretRandomGenerator, EncryptionRandomGenerator}; // Import SecretRandomGenerator and EncryptionRandomGenerator
 
 fn fhe_encrypt_decrypt() {
     // Define the parameters for the LWE scheme
@@ -15,6 +14,9 @@ fn fhe_encrypt_decrypt() {
     let mut secret_rng = SecretRandomGenerator::new(None); // Create a secret random generator
     let secret_key = LweSecretKey::generate_binary(lwe_dimension, &mut secret_rng); // Generate the secret key
 
+    // Create an encryption random generator
+    let mut encryption_rng = EncryptionRandomGenerator::new(None); // Create an encryption random generator
+
     // Define the plaintext message to be encrypted
     let plaintext = "Hello World";
 
@@ -23,7 +25,7 @@ fn fhe_encrypt_decrypt() {
     for &byte in plaintext.as_bytes() {
         let plaintext = Plaintext(byte as u32); // Convert byte to Plaintext
         let mut ciphertext = LweCiphertext::allocate(0, lwe_dimension.to_lwe_size()); // Allocate space for the ciphertext
-        secret_key.encrypt_lwe(&mut ciphertext, &plaintext, noise, &mut secret_rng); // Encrypt the plaintext
+        secret_key.encrypt_lwe(&mut ciphertext, &plaintext, noise, &mut encryption_rng); // Encrypt the plaintext
         ciphertexts.push(ciphertext); // Store the ciphertext
     }
 
